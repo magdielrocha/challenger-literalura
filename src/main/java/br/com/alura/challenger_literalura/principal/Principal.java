@@ -1,6 +1,6 @@
-package br.com.alura.challenger_literalura_2.principal;
+package br.com.alura.challenger_literalura.principal;
 
-import br.com.alura.challenger_literalura_2.service.ConsultaApi;
+import br.com.alura.challenger_literalura.service.ConsultaApi;
 
 import java.util.Scanner;
 

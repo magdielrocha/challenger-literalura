@@ -1,16 +1,16 @@
-package br.com.alura.challenger_literalura_2;
+package br.com.alura.challenger_literalura;
 
-import br.com.alura.challenger_literalura_2.principal.Principal;
+import br.com.alura.challenger_literalura.principal.Principal;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ChallengerLiteralura2Application implements CommandLineRunner {
+public class ChallengerLiteraluraApplication implements CommandLineRunner {
 
 
 	public static void main(String[] args) {
-		SpringApplication.run(ChallengerLiteralura2Application.class, args);
+		SpringApplication.run(ChallengerLiteraluraApplication.class, args);
 	}
 
 
