@@ -69,4 +69,7 @@ public class LivroService {
     }
 
 
+    public List<Livro> encontrarLivroPorIdioma(String idioma) {
+        return livroRepository.encontrarLivroPorIdioma(idioma);
+    }
 }

@@ -58,8 +58,8 @@ public class Autor {
 
     @Override
     public String toString() {
-        return "-----------------------------" +
-                "\nAutor: " + nome +
+        return "--------- AUTOR -------------" +
+                "\nNome: " + nome +
                 "\nAno de Nascimento: " + anoNascimento +
                 "\nAno de Falecimento: " + anoMorte +
                 "\n-----------------------------";

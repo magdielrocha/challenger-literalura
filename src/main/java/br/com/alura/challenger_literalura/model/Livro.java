@@ -36,17 +36,6 @@ public class Livro {
         this.autores = autores;
     }
 
-//    public Livro(DadosLivro dados) {
-//        this.titulo = dados.titulo();
-//        this.idioma = String.join(", ", dados.idioma());
-//        this.quantidadeDownloads = Double.valueOf(dados.quantidadeDownloads());
-//
-//        this.autores = dados.autores()
-//                .stream()
-//                .map(a -> autorService.salvarAutor(new Autor(a.nome(), a.anoNascimento(), a.anoMorte()))
-//                        .collect(Collectors.toList());
-//    }
-
 
     public Long getId() {
         return id;
@@ -90,7 +79,7 @@ public class Livro {
 
     @Override
     public String toString() {
-        return "-----------------------------" +
+        return "------------- LIVRO -------------" +
                 "\nTítulo: " + titulo +
                 "\nAutor: " + autores.stream().map(Autor::getNome).collect(Collectors.joining(", ")) +
                 "\nIdioma: " + idioma +

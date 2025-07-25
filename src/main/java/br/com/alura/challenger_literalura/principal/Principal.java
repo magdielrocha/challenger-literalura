@@ -8,6 +8,7 @@ import br.com.alura.challenger_literalura.service.LivroService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Principal {
 
@@ -83,6 +84,39 @@ public class Principal {
 
 
     private void listarLivrosPorIdioma() {
+        var idiomaOpcoes = """
+                Insira o idioma para realizar a busca:
+                es - espanhol
+                en - inglês
+                fr - francês
+                pt - português
+                """;
+
+        Set<String> idiomasValidos = Set.of("pt", "en", "fr", "es");
+        String entrada = "";
+        while (true) {
+            System.out.println(idiomaOpcoes);
+            entrada = leitura.nextLine().trim().toLowerCase();
+
+            if (!entrada.matches("[a-zA-Z]+")) {
+                System.out.println("Opção inválida, tente novamente.");
+                continue;
+            }
+            if (!idiomasValidos.contains(entrada)){
+                System.out.println("Idioma não reconhecido! Digite uma das opções: pt, en, fr, es.");
+            }
+            break;
+        }
+
+        List<Livro> livrosPorIdioma = livroService.encontrarLivroPorIdioma(entrada);
+
+        if (livrosPorIdioma.isEmpty()) {
+            System.out.println("Não existem livros nesse idioma no banco de dados.");
+        } else {
+            System.out.println("Livros no idioma '" + entrada + "':");
+            livrosPorIdioma.forEach(System.out::println);
+        }
+
     }
 
     private void listarAutoresVivorPorAno() {
