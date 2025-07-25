@@ -1,16 +1,30 @@
 package br.com.alura.challenger_literalura.principal;
 
-import br.com.alura.challenger_literalura.service.ConsultaApi;
+import br.com.alura.challenger_literalura.model.Autor;
+import br.com.alura.challenger_literalura.model.Livro;
+import br.com.alura.challenger_literalura.service.AutorService;
+import br.com.alura.challenger_literalura.service.LivroService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Principal {
 
     private Scanner leitura = new Scanner(System.in);
 
-    private ConsultaApi consultaApi = new ConsultaApi();
+    private List<Livro> livros = new ArrayList<>();
 
-    private final String endereco = "https://gutendex.com/books/?search=";
+    private List<Autor> autores = new ArrayList<>();
+
+    private final LivroService livroService;
+    private final AutorService autorService;
+
+    public Principal(LivroService livroService, AutorService autorService) {
+        this.livroService = livroService;
+        this.autorService = autorService;
+
+    }
 
 
     public void exibeMenu() {
@@ -27,60 +41,100 @@ public class Principal {
                     5- Listar livros em um determinado idioma
                     
                     0 - Sair
+                    -------------------------------------------
                     """;
 
             System.out.println(menu);
-            opcao = leitura.nextInt();
-            leitura.nextLine();
+            System.out.println("Digite sua opção: ");
+            var entrada = leitura.nextLine().trim();
+
+            if (entrada.isBlank() || !entrada.matches("\\d+")){
+                mostrarErro("entrada");
+                continue;
+            }
+
+            try {
+                opcao = Integer.parseInt(entrada);
+            } catch (NumberFormatException e) {
+                mostrarErro("entrada");
+                continue;
+            }
 
             switch (opcao) {
-                case 1:
-                    buscarLivroPeloTitulo();
-                    break;
-                case 2:
-                    listarLivrosRegistrados();
-                    break;
-                case 3:
-                    listarAutoresRegistrados();
-                    break;
-                case 4:
-                    listarAutoresVivorPorAno();
-                    break;
-                case 5:
-                    listarLivrosPorIdioma();
-                    break;
-                case 0:
-                    System.out.println("Encerrando o programa");
-                    break;
-                default:
-                    System.out.println("Opção inválida, tente novamente");
+                case 1 -> buscarLivroPeloTitulo();
+                case 2 -> listarLivrosRegistrados();
+                case 3 ->listarAutoresRegistrados();
+                case 4 -> listarAutoresVivorPorAno();
+                case 5 -> listarLivrosPorIdioma();
+                case 0 -> System.out.println("Encerrando o programa");
+                default -> System.out.println("Opção inválida, tente novamente");
 
             }
         }
-
-
     }
+
+    public static void mostrarErro(String tipo) {
+        switch (tipo) {
+            case "entrada" -> System.out.println("Número inválido. Tente novamente.\n");
+            case "opcao" -> System.out.println("Entrada inválida. Tente novamente.\n");
+            default -> System.out.println("Erro desconhecido...\n");
+        }
+    }
+
 
     private void listarLivrosPorIdioma() {
     }
 
     private void listarAutoresVivorPorAno() {
+        System.out.println("Digite o ano que deseja pesquisar: ");
+        var entrada = leitura.nextLine().trim();
+
+        if (!entrada.matches("^\\d+$")) {
+            System.out.println("Ano inválido. Tente novamente.\n");
+            return;
+        }
+
+        var anoPesquisa = Integer.parseInt(entrada);
+        List<Autor> autoresVivosPorAno = autorService.listarAutoresVivos(anoPesquisa);
+
+        if(autoresVivosPorAno.isEmpty()){
+            System.out.println("Nenhum autor vivo encontrado em " + anoPesquisa + ".");
+        } else {
+            System.out.println("Autores vivos em " + anoPesquisa + ": ");
+            autoresVivosPorAno.forEach(System.out::println);
+        }
     }
 
     private void listarAutoresRegistrados() {
+
+        List<Autor> autores = autorService.listarAutores();
+
+        if (autores.isEmpty()) {
+            System.out.println("Nenhum autor registrado.");
+        } else {
+            autores.forEach(System.out::println);
+        }
+
     }
 
     private void listarLivrosRegistrados() {
+        livros = livroService.listarLivros();
+        livros.forEach(System.out::println);
     }
 
     public void buscarLivroPeloTitulo() {
-
         System.out.println("Digite o nome do livro: ");
         var nomeLivro = leitura.nextLine();
-        var json = consultaApi.obterDados(endereco + nomeLivro.toLowerCase().trim().replace(" ", "+"));
-        System.out.println(json);
+
+        if (nomeLivro.isBlank()) {
+            System.out.println("Você precisa digitar um nome válido!");
+            return;
+        }
+        try {
+            Livro livro = livroService.consultaLivroPelotitulo(nomeLivro);
+            System.out.println(livro);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
     }
-
-
-
 }
